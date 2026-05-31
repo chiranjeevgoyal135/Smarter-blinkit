@@ -8,6 +8,14 @@ const app        = express();
 app.use(cors());
 app.use(express.json());
 
+// URL Rewrite Middleware to support Vercel's routePrefix behavior
+app.use((req, res, next) => {
+  if (req.url && req.url !== "/" && !req.url.startsWith("/api")) {
+    req.url = "/api" + req.url;
+  }
+  next();
+});
+
 // Database connection middleware (ensures connection before routing)
 app.use(async (req, res, next) => {
   try {
