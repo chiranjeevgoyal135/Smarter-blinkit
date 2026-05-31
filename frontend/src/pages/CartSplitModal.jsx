@@ -18,7 +18,7 @@ export default function CartSplitModal({ cart, shopInfo, allShops, onClose, onCo
       // Fetch inventories for all shops in parallel
       const invResults = await Promise.all(
         allShops.map(shop =>
-          fetch(`http://localhost:5000/api/shop-inventory/${shop.id}?shopName=${encodeURIComponent(shop.name)}`)
+          fetch(`/api/shop-inventory/${shop.id}?shopName=${encodeURIComponent(shop.name)}`)
             .then(r => r.json())
             .then(d => ({ shopId: shop.id, inventory: d.inventory || [] }))
             .catch(() => ({ shopId: shop.id, inventory: [] }))
@@ -29,7 +29,7 @@ export default function CartSplitModal({ cart, shopInfo, allShops, onClose, onCo
       invResults.forEach(({ shopId, inventory }) => { shopInventories[shopId] = inventory; });
 
       // Run split algorithm
-      const res  = await fetch("http://localhost:5000/api/cart-split", {
+      const res  = await fetch("/api/cart-split", {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

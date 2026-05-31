@@ -1,7 +1,7 @@
 // SellerDashboard.jsx — Barcode-based Inventory Management System
 import { useState, useEffect, useRef } from "react";
 
-const API = "http://localhost:5000/api/shop-inventory";
+const API = "/api/shop-inventory";
 
 export default function SellerDashboard({ user, onLogout }) {
   const [inventory,  setInventory]  = useState([]);

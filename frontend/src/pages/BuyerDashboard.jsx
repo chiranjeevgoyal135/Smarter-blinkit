@@ -6,7 +6,7 @@ import ProductModal   from "./ProductModal.jsx";
 import CartPage       from "./CartPage.jsx";
 import ProductPairing from "./ProductPairing.jsx";
 
-const API = "http://localhost:5000/api";
+const API = "/api";
 
 async function fetchNearestShops(lat, lng) {
   const res = await fetch(`${API}/shops/nearest?lat=${lat}&lng=${lng}`);

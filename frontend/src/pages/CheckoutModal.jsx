@@ -43,7 +43,7 @@ export default function CheckoutModal({ cart, shopInfo, splitPlan, onClose, onSu
     setError("");
     setStep("processing");
     try {
-      const orderRes  = await fetch("http://localhost:5000/api/payment/create-order", {
+      const orderRes  = await fetch("/api/payment/create-order", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: total }),
       });
@@ -56,7 +56,7 @@ export default function CheckoutModal({ cart, shopInfo, splitPlan, onClose, onSu
           order_id: orderData.orderId, name: "SmarterBlinkit",
           description: `${cart.length} items`, theme: { color: "#f6a623" },
           handler: async (response) => {
-            const v = await fetch("http://localhost:5000/api/payment/verify", {
+            const v = await fetch("/api/payment/verify", {
               method: "POST", headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ razorpay_order_id: response.razorpay_order_id, razorpay_payment_id: response.razorpay_payment_id, razorpay_signature: response.razorpay_signature }),
             });

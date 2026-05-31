@@ -25,7 +25,7 @@ export default function ProductModal({ product, onClose, onAddToCart }) {
       return;
     }
     setLoading(true);
-    fetch(`http://localhost:5000/api/similar/${product.barcode}`)
+    fetch(`/api/similar/${product.barcode}`)
       .then(r => r.json())
       .then(data => {
         if (data.success) {

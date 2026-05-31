@@ -9,7 +9,7 @@
 // ============================================================
 
 // Base URL of our Express backend
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "/api";
 
 // ── Auth ──────────────────────────────────────────────────
 // Sends login credentials to backend, returns user object on success

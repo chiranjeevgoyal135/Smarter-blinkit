@@ -26,7 +26,7 @@ export default function Storeboard({ user, onLogout }) {
 
   async function fetchData() {
     try {
-      const res  = await fetch("http://localhost:5000/api/analytics/dashboard");
+      const res  = await fetch("/api/analytics/dashboard");
       const json = await res.json();
       if (json.success) {
         setData(json);

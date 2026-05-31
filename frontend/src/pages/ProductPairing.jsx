@@ -30,7 +30,7 @@ export default function ProductPairing({ onBack }) {
   async function loadInsights() {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/product-pairing/insights");
+      const res = await fetch("/api/product-pairing/insights");
       const d   = await res.json();
       if (d.success) setData(d);
     } catch(e) { console.error(e); }
@@ -41,7 +41,7 @@ export default function ProductPairing({ onBack }) {
     if (!semQuery.trim()) return;
     setSemLoading(true); setSemResult(null);
     try {
-      const res = await fetch("http://localhost:5000/api/product-pairing/semantic", {
+      const res = await fetch("/api/product-pairing/semantic", {
         method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productName: semQuery }),
       });
@@ -54,7 +54,7 @@ export default function ProductPairing({ onBack }) {
   async function loadCartSuggestions() {
     if (!cartItems.length) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/product-pairing/cart?items=${cartItems.join(",")}`);
+      const res = await fetch(`/api/product-pairing/cart?items=${cartItems.join(",")}`);
       const d   = await res.json();
       if (d.success) setCartSuggs(d.suggestions);
     } catch(e) { console.error(e); }

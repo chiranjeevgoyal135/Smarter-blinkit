@@ -81,7 +81,7 @@ export default function MoneyMap({ onBack }) {
   async function loadCities() {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/money-map/cities");
+      const res = await fetch("/api/money-map/cities");
       const d   = await res.json();
       if (d.success) setCities(d.cities);
     } catch(e) { console.error(e); }
@@ -91,7 +91,7 @@ export default function MoneyMap({ onBack }) {
   async function loadCity(name) {
     setLoading(true); setSelectedN(null);
     try {
-      const res = await fetch(`http://localhost:5000/api/money-map?city=${name}`);
+      const res = await fetch(`/api/money-map?city=${name}`);
       const d   = await res.json();
       if (d.success) { setCityData(d); setSelectedCity(name); setView("city"); }
     } catch(e) { console.error(e); }

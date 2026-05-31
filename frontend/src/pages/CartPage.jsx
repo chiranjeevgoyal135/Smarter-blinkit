@@ -16,7 +16,7 @@ export default function CartPage({ cart, setCart, shopInfo, allShops, onBack, on
     if (!cart.length || fetchedRef.current) return;
     fetchedRef.current = true;
     setLoadingSug(true);
-    fetch("http://localhost:5000/api/cart-suggestions", {
+    fetch("/api/cart-suggestions", {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
       body:    JSON.stringify({ cartItems: cart }),
