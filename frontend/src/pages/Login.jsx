@@ -56,22 +56,22 @@ export default function Login({ onLogin }) {
       <div style={s.blob3}/>
       
       {/* Main card */}
-      <div style={s.card} className="fade-in">
+      <div style={s.card} className="fade-in login-card">
         {/* Logo section */}
-        <div style={s.logoSection}>
-          <div style={s.logoCircle}>
+        <div style={s.logoSection} className="login-logo-section">
+          <div style={s.logoCircle} className="login-logo-circle">
             <span style={s.logoIcon}>⚡</span>
           </div>
-          <h1 style={s.logoText}>
+          <h1 style={s.logoText} className="login-logo-text">
             Smarter<span style={{...s.logoAccent, background: roleConfig[role].gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent"}}>Blinkit</span>
           </h1>
-          <p style={s.tagline}>India's Most Intelligent Grocery Platform</p>
+          <p style={s.tagline} className="login-tagline">India's Most Intelligent Grocery Platform</p>
         </div>
 
         {/* Role selector */}
-        <div style={s.roleSection}>
-          <p style={s.roleLabel}>Select Your Role</p>
-          <div style={s.tabs}>
+        <div style={s.roleSection} className="login-role-section">
+          <p style={s.roleLabel} className="login-role-label">Select Your Role</p>
+          <div style={s.tabs} className="login-tabs">
             {Object.entries(roleConfig).map(([r, cfg]) => (
               <button key={r}
                 style={{
@@ -146,7 +146,7 @@ export default function Login({ onLogin }) {
           </button>
 
           {/* Demo credentials */}
-          <div style={s.demoBox} onClick={fillDemo}>
+          <div style={s.demoBox} className="login-demo-box" onClick={fillDemo}>
             <div style={s.demoHeader}>
               <span style={s.demoIcon}>🧪</span>
               <span style={s.demoTitle}>Demo Credentials</span>

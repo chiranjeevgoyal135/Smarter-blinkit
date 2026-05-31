@@ -54,17 +54,17 @@ export default function CartPage({ cart, setCart, shopInfo, allShops, onBack, on
   const savings     = Math.floor(total * 0.05); // 5% mock savings
 
   return (
-    <div style={s.page}>
+    <div style={s.page} className="cart-page">
       {/* Header */}
-      <div style={s.header}>
+      <div style={s.header} className="cart-header">
         <button style={s.backBtn} onClick={onBack}>← Back</button>
         <span style={s.headerTitle}>🛒 Your Cart</span>
         <span style={s.itemCount}>{cart.reduce((s,i)=>s+i.qty,0)} items</span>
       </div>
 
-      <div style={s.body}>
+      <div style={s.body} className="cart-body">
         {/* LEFT — Cart items */}
-        <div style={s.left}>
+        <div style={s.left} className="cart-left">
 
           {cart.length === 0 ? (
             <div style={s.emptyCart}>
@@ -122,7 +122,7 @@ export default function CartPage({ cart, setCart, shopInfo, allShops, onBack, on
                 )}
 
                 {!loadingSug && suggestions.length > 0 && (
-                  <div style={s.sugGrid}>
+                  <div style={s.sugGrid} className="cart-sug-grid">
                     {suggestions.map((item, i) => (
                       <div key={i} style={s.sugCard}>
                         <div style={s.sugEmoji}>{item.emoji || "🛍️"}</div>
@@ -149,7 +149,7 @@ export default function CartPage({ cart, setCart, shopInfo, allShops, onBack, on
                       <span style={s.sugBadge}>AI Powered</span>
                     </div>
                     <div style={s.bundleSub}>Classic combos customers love</div>
-                    <div style={s.bundleGrid}>
+                    <div style={s.bundleGrid} className="cart-bundle-grid">
                       {bundles.map((bundle, bi) => (
                         <div key={bi} style={s.bundleCard}>
                           <div style={s.bundleTop}>
@@ -189,7 +189,7 @@ export default function CartPage({ cart, setCart, shopInfo, allShops, onBack, on
 
         {/* RIGHT — Order summary */}
         {cart.length > 0 && (
-          <div style={s.right}>
+          <div style={s.right} className="cart-right">
             <div style={s.summaryBox}>
               <div style={s.summaryTitle}>Order Summary</div>
 

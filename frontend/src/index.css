@@ -273,3 +273,147 @@ select:focus {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ──────────────────────────────────────────────────────── */
+/*                     MOBILE RESPONSIVENESS                */
+/* ──────────────────────────────────────────────────────── */
+
+/* Login page mobile adjustments */
+@media (max-width: 480px) {
+  .login-card {
+    padding: 24px 16px !important;
+    max-width: 100% !important;
+    margin: 10px !important;
+  }
+  .login-tabs {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+}
+
+/* Buyer Dashboard mobile adjustments */
+@media (max-width: 768px) {
+  .app-header {
+    height: auto !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 12px 16px !important;
+    gap: 12px !important;
+  }
+  .app-header-left {
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+  .app-header-right {
+    justify-content: space-between !important;
+    width: 100% !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  .app-username {
+    display: none !important;
+  }
+  .app-body {
+    padding: 16px 12px 80px !important;
+  }
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+    gap: 10px !important;
+  }
+  .intent-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .app-recipe-btn {
+    padding: 10px 14px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+}
+
+/* Cart Page mobile adjustments */
+@media (max-width: 768px) {
+  .cart-body {
+    flex-direction: column !important;
+    padding: 12px !important;
+    gap: 16px !important;
+  }
+  .cart-right {
+    width: 100% !important;
+    position: static !important;
+  }
+  .cart-sug-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  .cart-bundle-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}
+
+/* Seller Dashboard mobile adjustments */
+@media (max-width: 768px) {
+  .seller-header {
+    height: auto !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 12px 16px !important;
+    gap: 10px !important;
+  }
+  .seller-tabs {
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  .seller-header-right {
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+  .seller-body {
+    padding: 12px !important;
+  }
+  .seller-stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+  .seller-scan-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .seller-analytics-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Owner Dashboard mobile adjustments */
+@media (max-width: 768px) {
+  .owner-header {
+    height: auto !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 12px 16px !important;
+    gap: 12px !important;
+  }
+  .owner-header-left {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+  .owner-header-right {
+    width: 100% !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+  }
+  .owner-body {
+    padding: 12px !important;
+  }
+  .owner-stats-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+  .owner-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}

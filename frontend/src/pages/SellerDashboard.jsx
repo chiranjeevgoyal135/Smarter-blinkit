@@ -131,14 +131,14 @@ export default function SellerDashboard({ user, onLogout }) {
   const totalValue = inventory.reduce((s, p) => s + p.stock * p.price, 0);
 
   return (
-    <div style={s.page}>
+    <div style={s.page} className="seller-page">
       {/* HEADER */}
-      <div style={s.header}>
-        <div style={s.headerLeft}>
+      <div style={s.header} className="seller-header">
+        <div style={s.headerLeft} className="seller-header-left">
           <span style={s.logo}>⚡ SmarterBlinkit</span>
           <div style={s.shopPill}>🏪 {shopName}<span style={s.shopId}>#{shopId}</span></div>
         </div>
-        <div style={s.tabs}>
+        <div style={s.tabs} className="seller-tabs">
           {[
             { id: "scan",      icon: "📦", label: "Scan & Update" },
             { id: "inventory", icon: "📋", label: "Inventory"     },
@@ -151,7 +151,7 @@ export default function SellerDashboard({ user, onLogout }) {
             </button>
           ))}
         </div>
-        <div style={s.headerRight}>
+        <div style={s.headerRight} className="seller-header-right">
           <span style={s.userName}>👤 {user.name}</span>
           <button style={s.logoutBtn} onClick={onLogout}>Logout</button>
         </div>
@@ -164,9 +164,9 @@ export default function SellerDashboard({ user, onLogout }) {
           <div style={s.loadingSub}>Creating real branded products for {shopName}</div>
         </div>
       ) : (
-        <div style={s.body}>
+        <div style={s.body} className="seller-body">
           {/* ── STAT STRIP ── */}
-          <div style={s.statsRow}>
+          <div style={s.statsRow} className="seller-stats-row">
             {[
               { val: inventory.length, lbl: "Products",    color: "#3b82f6" },
               { val: totalUnits,       lbl: "Total Units",  color: "#22c55e" },
@@ -183,7 +183,7 @@ export default function SellerDashboard({ user, onLogout }) {
 
           {/* ── SCAN TAB ── */}
           {activeTab === "scan" && (
-            <div style={s.scanLayout}>
+            <div style={s.scanLayout} className="seller-scan-layout">
               <div style={s.scanLeft}>
                 {/* AI Add Product */}
                 <div style={s.card}>
@@ -367,7 +367,7 @@ export default function SellerDashboard({ user, onLogout }) {
 
           {/* ── ANALYTICS TAB ── */}
           {activeTab === "analytics" && (
-            <div style={s.analyticsGrid}>
+            <div style={s.analyticsGrid} className="seller-analytics-grid">
               <div style={s.card}>
                 <div style={s.cardTitle}>📊 Category Breakdown</div>
                 {categories.filter(c => c !== "All").map(cat => {

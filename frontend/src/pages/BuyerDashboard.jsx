@@ -123,14 +123,14 @@ export default function BuyerDashboard({ user, onLogout }) {
   );
 
   return (
-    <div style={s.page}>
+    <div style={s.page} className="app-page">
       {/* ── HEADER ── */}
-      <div style={s.header}>
-        <div style={s.headerLeft}>
-          <span style={s.logo}>⚡ SmarterBlinkit</span>
+      <div style={s.header} className="app-header">
+        <div style={s.headerLeft} className="app-header-left">
+          <span style={s.logo} className="app-logo">⚡ SmarterBlinkit</span>
 
           {/* Location pill */}
-          <div style={s.locPill} onClick={() => setShowShops(!showShops)}>
+          <div style={s.locPill} className="app-loc-pill" onClick={() => setShowShops(!showShops)}>
             {locStatus === "found" && shopInfo ? (
               <>📍 <strong style={{ color: "#f6a623" }}>{shopInfo.deliveryMins} mins</strong>&nbsp;· {shopInfo.city} ▾</>
             ) : locStatus === "detecting" ? (
@@ -141,7 +141,7 @@ export default function BuyerDashboard({ user, onLogout }) {
           </div>
 
           {showShops && allShops.length > 0 && (
-            <div style={s.shopDropdown}>
+            <div style={s.shopDropdown} className="app-shop-dropdown">
               <div style={s.shopDropTitle}>Nearby Stores</div>
               {allShops.slice(0, 5).map((shop, i) => (
                 <div key={i} style={{ ...s.shopOption, ...(i === 0 ? s.shopOptionFirst : {}) }}
@@ -160,28 +160,28 @@ export default function BuyerDashboard({ user, onLogout }) {
           )}
         </div>
 
-        <div style={s.headerRight}>
-          <span style={s.userName}>👤 {user.name}</span>
-          <button style={s.pairingBtn} onClick={() => setShowPairing(true)}>
+        <div style={s.headerRight} className="app-header-right">
+          <span style={s.userName} className="app-username">👤 {user.name}</span>
+          <button style={s.pairingBtn} className="app-pairing-btn" onClick={() => setShowPairing(true)}>
             🧠 Smart Pairing
           </button>
-          <button style={s.cartBtn} onClick={() => setShowCart(true)}>
+          <button style={s.cartBtn} className="app-cart-btn" onClick={() => setShowCart(true)}>
             🛒 Cart
             {cartCount > 0 && <span style={s.cartBadge}>{cartCount}</span>}
           </button>
           {cartCount > 0 && (
-            <span style={s.cartTotal}>₹{cartTotal}</span>
+            <span style={s.cartTotal} className="app-cart-total">₹{cartTotal}</span>
           )}
-          <button style={s.logoutBtn} onClick={onLogout}>Logout</button>
+          <button style={s.logoutBtn} className="app-logout-btn" onClick={onLogout}>Logout</button>
         </div>
       </div>
 
       {/* ── BODY ── */}
-      <div style={s.body}>
+      <div style={s.body} className="app-body">
 
         {/* Search bar */}
         <div style={s.searchSection}>
-          <div style={s.searchBox}>
+          <div style={s.searchBox} className="app-search-box">
             <span style={s.searchIcon}>🔍</span>
             <input
               ref={inputRef}
@@ -201,7 +201,7 @@ export default function BuyerDashboard({ user, onLogout }) {
         </div>
 
         {/* Recipe Agent banner */}
-        <button style={s.recipeBtn} onClick={() => setShowRecipe(true)}>
+        <button style={s.recipeBtn} className="app-recipe-btn" onClick={() => setShowRecipe(true)}>
           <span style={s.recipeBtnIcon}>🤖</span>
           <div style={s.recipeBtnText}>
             <div style={s.recipeBtnTitle}>Recipe Agent</div>
@@ -235,7 +235,7 @@ export default function BuyerDashboard({ user, onLogout }) {
             <div style={s.emptySub}>Search any product, brand, or describe your situation</div>
             <div style={s.intentSection}>
               <div style={s.intentLabel}>✨ Try these intent searches</div>
-              <div style={s.intentGrid}>
+              <div style={s.intentGrid} className="intent-grid">
                 {INTENT_CHIPS.map(chip => (
                   <button key={chip.query} style={s.intentChip}
                     onClick={() => { setQuery(chip.query); inputRef.current?.focus(); }}>
@@ -262,7 +262,7 @@ export default function BuyerDashboard({ user, onLogout }) {
               <span style={s.aiBadge}>Groq AI · llama-3.3-70b</span>
             </div>
 
-            <div style={s.grid}>
+            <div style={s.grid} className="products-grid">
               {suggestions.map((item, i) => {
                 const inCart = cart.find(c => c.name === item.name);
                 return (

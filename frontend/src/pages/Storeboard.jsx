@@ -39,19 +39,19 @@ export default function Storeboard({ user, onLogout }) {
   }
 
   if (loading || !data) return (
-    <div style={s.page}>
-      <div style={s.hdr}><span style={s.logo}>⚡ SmarterBlinkit</span><div style={s.ownerBadge}>👑 Owner</div></div>
-      <div style={s.centreLoad}><div style={s.spinner}/><p style={{color:"#888"}}>Loading live data...</p></div>
+    <div style={s.page} className="owner-page">
+      <div style={s.hdr} className="owner-header"><span style={s.logo}>⚡ SmarterBlinkit</span><div style={s.ownerBadge}>👑 Owner</div></div>
+      <div style={s.centreLoad} className="owner-centre-load"><div style={s.spinner}/><p style={{color:"#888"}}>Loading live data...</p></div>
     </div>
   );
 
   const d = data;
 
   return (
-    <div style={s.page}>
+    <div style={s.page} className="owner-page">
       {/* ── HEADER ── */}
-      <div style={s.hdr}>
-        <div style={s.hdrLeft}>
+      <div style={s.hdr} className="owner-header">
+        <div style={s.hdrLeft} className="owner-header-left">
           <span style={s.logo}>⚡ SmarterBlinkit</span>
           <div style={s.ownerBadge}>👑 Owner Dashboard</div>
           <div style={s.livePill}>
@@ -59,8 +59,8 @@ export default function Storeboard({ user, onLogout }) {
             LIVE · updated {secsSince}s ago
           </div>
         </div>
-        <div style={s.hdrRight}>
-<div style={s.tabRow}>
+        <div style={s.hdrRight} className="owner-header-right">
+          <div style={s.tabRow}>
             <button style={{...s.tabBtn,...(tab==="dashboard"?s.tabActive:{})}} onClick={()=>setTab("dashboard")}>📊 Dashboard</button>
             <button style={{...s.tabBtn,...(tab==="moneymap"?s.tabActive:{})}}  onClick={()=>setTab("moneymap")}>💰 Money Map</button>
           </div>
@@ -69,9 +69,9 @@ export default function Storeboard({ user, onLogout }) {
         </div>
       </div>
 
-      {tab === "moneymap" ? <MoneyMap onBack={()=>setTab("dashboard")} /> : <div style={s.body}>
+      {tab === "moneymap" ? <MoneyMap onBack={()=>setTab("dashboard")} /> : <div style={s.body} className="owner-body">
         {/* ── STAT CARDS ── */}
-        <div style={s.statsRow}>
+        <div style={s.statsRow} className="owner-stats-row">
           {[
             { icon:"💰", label:"Revenue (1h)",   val:`₹${(d.summary.totalRevenue1h||0).toLocaleString()}`,  color:"#f6a623" },
             { icon:"📦", label:"Orders (1h)",    val: d.summary.totalOrders1h,                              color:"#3b82f6" },
@@ -88,7 +88,7 @@ export default function Storeboard({ user, onLogout }) {
           ))}
         </div>
 
-        <div style={s.grid}>
+        <div style={s.grid} className="owner-grid">
           {/* LEFT */}
           <div style={s.col}>
 
