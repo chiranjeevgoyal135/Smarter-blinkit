@@ -38,7 +38,7 @@ export default function Storeboard({ user, onLogout }) {
     setLoading(false);
   }
 
-  if (loading) return (
+  if (loading || !data) return (
     <div style={s.page}>
       <div style={s.hdr}><span style={s.logo}>⚡ SmarterBlinkit</span><div style={s.ownerBadge}>👑 Owner</div></div>
       <div style={s.centreLoad}><div style={s.spinner}/><p style={{color:"#888"}}>Loading live data...</p></div>
@@ -244,74 +244,461 @@ export default function Storeboard({ user, onLogout }) {
 }
 
 const s = {
-  page:         { minHeight:"100vh", background:"#0a0f1e", fontFamily:"'Segoe UI',sans-serif", color:"#fff" },
-  hdr:          { background:"#0f172a", borderBottom:"1px solid #1e293b", padding:"0 24px", height:56, display:"flex", alignItems:"center", justifyContent:"space-between", position:"sticky", top:0, zIndex:10 },
-  hdrLeft:      { display:"flex", alignItems:"center", gap:14 },
-  logo:         { fontWeight:800, fontSize:18, color:"#fff" },
-  ownerBadge:   { background:"linear-gradient(135deg,#7c3aed,#a855f7)", color:"#fff", borderRadius:20, padding:"3px 12px", fontSize:12, fontWeight:700 },
-  livePill:     { display:"flex", alignItems:"center", gap:6, background:"#0f2a1a", border:"1px solid #166534", borderRadius:20, padding:"3px 12px", fontSize:11, color:"#22c55e" },
-  liveDot:      { width:7, height:7, background:"#22c55e", borderRadius:"50%", display:"inline-block", transition:"box-shadow 0.3s" },
-  hdrRight:     { display:"flex", alignItems:"center", gap:12 },
-  uname:        { fontSize:13, color:"#64748b" },
-  tabRow:     { display:"flex", gap:6 },
-  tabBtn:     { padding:"6px 14px", borderRadius:20, border:"1px solid #1e293b", background:"transparent", cursor:"pointer", fontSize:12, fontWeight:600, color:"#64748b" },
-  tabActive:  { background:"#1e293b", border:"1px solid #334155", color:"#f1f5f9" },
-  logoutBtn:    { padding:"5px 14px", borderRadius:8, border:"1px solid #1e293b", background:"transparent", cursor:"pointer", fontSize:13, color:"#94a3b8" },
-  centreLoad:   { display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", minHeight:"80vh" },
-  spinner:      { width:48, height:48, border:"4px solid #1e293b", borderTopColor:"#f6a623", borderRadius:"50%", animation:"spin 0.8s linear infinite" },
-  body:         { padding:20, maxWidth:1400, margin:"0 auto", display:"flex", flexDirection:"column", gap:16 },
-  statsRow:     { display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:14 },
-  statCard:     { background:"#0f172a", border:"1px solid #1e293b", borderRadius:14, padding:"16px 20px", display:"flex", alignItems:"center", gap:14 },
-  statIcon:     { width:44, height:44, borderRadius:12, display:"flex", alignItems:"center", justifyContent:"center", fontSize:22, flexShrink:0 },
-  statVal:      { fontSize:24, fontWeight:800 },
-  statLbl:      { fontSize:12, color:"#64748b", marginTop:2 },
-  grid:         { display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 },
-  col:          { display:"flex", flexDirection:"column", gap:16 },
-  card:         { background:"#0f172a", border:"1px solid #1e293b", borderRadius:16, padding:20 },
-  cardHdr:      { display:"flex", justifyContent:"space-between", alignItems:"flex-start", marginBottom:16 },
-  cardTitle:    { fontSize:15, fontWeight:700, color:"#f1f5f9" },
-  cardSub:      { fontSize:12, color:"#475569", marginTop:3 },
-  liveTag:      { background:"#052e16", border:"1px solid #166534", color:"#22c55e", fontSize:10, fontWeight:800, padding:"2px 8px", borderRadius:6, letterSpacing:1 },
-  prodRow:      { display:"flex", alignItems:"center", gap:10, padding:"10px 0", borderBottom:"1px solid #1e293b" },
-  prodRank:     { fontSize:18, width:28, textAlign:"center", flexShrink:0 },
-  prodEmoji:    { fontSize:24, flexShrink:0 },
-  prodInfo:     { flex:1 },
-  prodName:     { fontSize:13, fontWeight:600, color:"#e2e8f0" },
-  prodMeta:     { fontSize:11, color:"#475569", marginBottom:4 },
-  barBg:        { height:4, background:"#1e293b", borderRadius:2, overflow:"hidden" },
-  barFill:      { height:"100%", borderRadius:2, transition:"width 0.8s ease" },
-  prodRight:    { textAlign:"right", flexShrink:0 },
-  prodUnits:    { fontSize:20, fontWeight:800, color:"#f6a623" },
-  prodUnitLbl:  { fontSize:10, color:"#475569" },
-  prodRev:      { fontSize:11, color:"#64748b", marginTop:2 },
-  chart:        { display:"flex", alignItems:"flex-end", gap:6, height:140, paddingTop:10 },
-  chartCol:     { flex:1, display:"flex", flexDirection:"column", alignItems:"center", gap:4 },
-  chartVal:     { fontSize:10, color:"#475569" },
-  chartBar:     { width:"100%", borderRadius:"3px 3px 0 0", transition:"height 0.6s ease" },
-  chartLbl:     { fontSize:9, color:"#334155", textAlign:"center" },
-  shopRow:      { display:"flex", alignItems:"center", gap:12, padding:"12px 0", borderBottom:"1px solid #1e293b" },
-  shopRankNum:  { fontSize:20, width:30, textAlign:"center", flexShrink:0 },
-  shopInfo:     { flex:1 },
-  shopName:     { fontSize:14, fontWeight:600, color:"#e2e8f0" },
-  shopMeta:     { fontSize:11, color:"#475569", margin:"2px 0" },
-  shopStars:    { fontSize:13, color:"#f6a623" },
-  shopRatingBubble:{ background:"#1e293b", borderRadius:12, padding:"8px 14px", textAlign:"center", flexShrink:0 },
-  ratingNum:    { fontSize:22, fontWeight:800, color:"#f6a623" },
-  ratingLbl:    { fontSize:10, color:"#475569" },
-  feed:         { display:"flex", flexDirection:"column", gap:0, maxHeight:280, overflowY:"auto" },
-  feedRow:      { display:"flex", alignItems:"center", gap:10, padding:"8px 0", borderBottom:"1px solid #1e293b", transition:"opacity 0.3s" },
-  feedEmoji:    { fontSize:20, flexShrink:0 },
-  feedInfo:     { flex:1, fontSize:12 },
-  feedProduct:  { color:"#e2e8f0", fontWeight:600 },
-  feedShop:     { color:"#475569" },
-  feedRight:    { textAlign:"right", flexShrink:0 },
-  feedPrice:    { fontSize:13, fontWeight:700, color:"#22c55e" },
-  feedTime:     { fontSize:10, color:"#334155" },
-  catGrid:      { display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:12 },
-  catCard:      { background:"#1e293b", borderRadius:12, padding:"14px 12px", textAlign:"center" },
-  catEmoji:     { fontSize:26, marginBottom:6 },
-  catName:      { fontSize:12, color:"#94a3b8", marginBottom:8, fontWeight:600 },
-  catBarH:      { height:6, background:"#0f172a", borderRadius:3, overflow:"hidden", marginBottom:6 },
-  catBarFill:   { height:"100%", background:"linear-gradient(90deg,#f6a623,#f97316)", borderRadius:3, transition:"width 0.8s ease" },
-  catUnits:     { fontSize:13, fontWeight:700, color:"#f6a623" },
+  page: {
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #0a0f1e 0%, #1a1f35 100%)",
+    fontFamily: "'Segoe UI', system-ui, sans-serif",
+    color: "#fff",
+    position: "relative",
+    overflow: "hidden"
+  },
+  hdr: {
+    background: "rgba(15, 23, 42, 0.95)",
+    backdropFilter: "blur(20px)",
+    borderBottom: "1px solid rgba(59, 130, 246, 0.2)",
+    padding: "0 32px",
+    height: 72,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    position: "sticky",
+    top: 0,
+    zIndex: 100,
+    boxShadow: "0 4px 24px rgba(0, 0, 0, 0.3)"
+  },
+  hdrLeft: {
+    display: "flex",
+    alignItems: "center",
+    gap: 20
+  },
+  logo: {
+    fontWeight: 900,
+    fontSize: 22,
+    background: "linear-gradient(135deg, #f6a623 0%, #f97316 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    letterSpacing: -0.5
+  },
+  ownerBadge: {
+    background: "linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)",
+    color: "#fff",
+    borderRadius: 24,
+    padding: "8px 20px",
+    fontSize: 13,
+    fontWeight: 700,
+    boxShadow: "0 4px 16px rgba(124, 58, 237, 0.4)",
+    display: "flex",
+    alignItems: "center",
+    gap: 8
+  },
+  livePill: {
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    background: "rgba(16, 185, 129, 0.1)",
+    border: "1px solid rgba(16, 185, 129, 0.3)",
+    borderRadius: 24,
+    padding: "6px 16px",
+    fontSize: 12,
+    color: "#10b981",
+    fontWeight: 600
+  },
+  liveDot: {
+    width: 8,
+    height: 8,
+    background: "#10b981",
+    borderRadius: "50%",
+    display: "inline-block",
+    transition: "box-shadow 0.3s",
+    animation: "pulse 2s ease-in-out infinite"
+  },
+  hdrRight: {
+    display: "flex",
+    alignItems: "center",
+    gap: 16
+  },
+  uname: {
+    fontSize: 14,
+    color: "#94a3b8",
+    fontWeight: 500
+  },
+  tabRow: {
+    display: "flex",
+    gap: 8,
+    background: "rgba(30, 41, 59, 0.5)",
+    borderRadius: 12,
+    padding: 4
+  },
+  tabBtn: {
+    padding: "8px 20px",
+    borderRadius: 10,
+    border: "none",
+    background: "transparent",
+    cursor: "pointer",
+    fontSize: 13,
+    fontWeight: 600,
+    color: "#64748b",
+    transition: "all 0.3s"
+  },
+  tabActive: {
+    background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
+    color: "#fff",
+    boxShadow: "0 4px 12px rgba(59, 130, 246, 0.4)"
+  },
+  logoutBtn: {
+    padding: "8px 20px",
+    borderRadius: 10,
+    border: "1px solid rgba(148, 163, 184, 0.2)",
+    background: "transparent",
+    cursor: "pointer",
+    fontSize: 13,
+    color: "#94a3b8",
+    fontWeight: 600,
+    transition: "all 0.3s"
+  },
+  centreLoad: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: "80vh",
+    gap: 20
+  },
+  spinner: {
+    width: 64,
+    height: 64,
+    border: "4px solid rgba(246, 166, 35, 0.1)",
+    borderTopColor: "#f6a623",
+    borderRadius: "50%",
+    animation: "spin 0.8s linear infinite"
+  },
+  body: {
+    padding: "32px 32px 100px",
+    maxWidth: 1600,
+    margin: "0 auto",
+    display: "flex",
+    flexDirection: "column",
+    gap: 24
+  },
+  statsRow: {
+    display: "grid",
+    gridTemplateColumns: "repeat(4, 1fr)",
+    gap: 20
+  },
+  statCard: {
+    background: "rgba(15, 23, 42, 0.6)",
+    backdropFilter: "blur(20px)",
+    border: "1px solid rgba(59, 130, 246, 0.2)",
+    borderRadius: 20,
+    padding: "24px",
+    display: "flex",
+    alignItems: "center",
+    gap: 20,
+    transition: "all 0.3s",
+    position: "relative",
+    overflow: "hidden"
+  },
+  statIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: 28,
+    flexShrink: 0,
+    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.2)"
+  },
+  statVal: {
+    fontSize: 32,
+    fontWeight: 900,
+    letterSpacing: -1
+  },
+  statLbl: {
+    fontSize: 13,
+    color: "#94a3b8",
+    marginTop: 4,
+    fontWeight: 600
+  },
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: 24
+  },
+  col: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 24
+  },
+  card: {
+    background: "rgba(15, 23, 42, 0.6)",
+    backdropFilter: "blur(20px)",
+    border: "1px solid rgba(59, 130, 246, 0.2)",
+    borderRadius: 20,
+    padding: 28,
+    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.2)"
+  },
+  cardHdr: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: 24
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: 800,
+    color: "#f1f5f9",
+    letterSpacing: -0.5
+  },
+  cardSub: {
+    fontSize: 13,
+    color: "#64748b",
+    marginTop: 4,
+    fontWeight: 500
+  },
+  liveTag: {
+    background: "rgba(16, 185, 129, 0.15)",
+    border: "1px solid rgba(16, 185, 129, 0.3)",
+    color: "#10b981",
+    fontSize: 11,
+    fontWeight: 800,
+    padding: "4px 12px",
+    borderRadius: 8,
+    letterSpacing: 1
+  },
+  prodRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: 16,
+    padding: "16px 0",
+    borderBottom: "1px solid rgba(59, 130, 246, 0.1)",
+    transition: "all 0.2s"
+  },
+  prodRank: {
+    fontSize: 24,
+    width: 36,
+    textAlign: "center",
+    flexShrink: 0,
+    fontWeight: 800
+  },
+  prodEmoji: {
+    fontSize: 32,
+    flexShrink: 0
+  },
+  prodInfo: {
+    flex: 1
+  },
+  prodName: {
+    fontSize: 15,
+    fontWeight: 700,
+    color: "#f1f5f9",
+    marginBottom: 4
+  },
+  prodMeta: {
+    fontSize: 12,
+    color: "#64748b",
+    marginBottom: 8
+  },
+  barBg: {
+    height: 6,
+    background: "rgba(30, 41, 59, 0.5)",
+    borderRadius: 3,
+    overflow: "hidden"
+  },
+  barFill: {
+    height: "100%",
+    borderRadius: 3,
+    transition: "width 0.8s cubic-bezier(0.4, 0, 0.2, 1)"
+  },
+  prodRight: {
+    textAlign: "right",
+    flexShrink: 0
+  },
+  prodUnits: {
+    fontSize: 24,
+    fontWeight: 900,
+    color: "#f6a623"
+  },
+  prodUnitLbl: {
+    fontSize: 11,
+    color: "#64748b",
+    marginTop: 2
+  },
+  prodRev: {
+    fontSize: 13,
+    color: "#94a3b8",
+    marginTop: 4,
+    fontWeight: 600
+  },
+  chart: {
+    display: "flex",
+    alignItems: "flex-end",
+    gap: 10,
+    height: 160,
+    paddingTop: 16
+  },
+  chartCol: {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 8
+  },
+  chartVal: {
+    fontSize: 12,
+    color: "#64748b",
+    fontWeight: 700
+  },
+  chartBar: {
+    width: "100%",
+    borderRadius: "6px 6px 0 0",
+    transition: "height 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+    boxShadow: "0 -4px 12px rgba(0, 0, 0, 0.2)"
+  },
+  chartLbl: {
+    fontSize: 10,
+    color: "#475569",
+    textAlign: "center",
+    fontWeight: 600
+  },
+  shopRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: 16,
+    padding: "16px 0",
+    borderBottom: "1px solid rgba(59, 130, 246, 0.1)"
+  },
+  shopRankNum: {
+    fontSize: 24,
+    width: 36,
+    textAlign: "center",
+    flexShrink: 0,
+    fontWeight: 800
+  },
+  shopInfo: {
+    flex: 1
+  },
+  shopName: {
+    fontSize: 15,
+    fontWeight: 700,
+    color: "#f1f5f9",
+    marginBottom: 4
+  },
+  shopMeta: {
+    fontSize: 12,
+    color: "#64748b",
+    margin: "4px 0",
+    fontWeight: 500
+  },
+  shopStars: {
+    fontSize: 16,
+    color: "#f6a623",
+    marginTop: 4
+  },
+  shopRatingBubble: {
+    background: "rgba(246, 166, 35, 0.15)",
+    borderRadius: 16,
+    padding: "12px 20px",
+    textAlign: "center",
+    flexShrink: 0,
+    border: "1px solid rgba(246, 166, 35, 0.3)"
+  },
+  ratingNum: {
+    fontSize: 28,
+    fontWeight: 900,
+    color: "#f6a623",
+    letterSpacing: -1
+  },
+  ratingLbl: {
+    fontSize: 11,
+    color: "#94a3b8",
+    marginTop: 2
+  },
+  feed: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 0,
+    maxHeight: 320,
+    overflowY: "auto"
+  },
+  feedRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: 12,
+    padding: "12px 0",
+    borderBottom: "1px solid rgba(59, 130, 246, 0.1)",
+    transition: "opacity 0.3s"
+  },
+  feedEmoji: {
+    fontSize: 24,
+    flexShrink: 0
+  },
+  feedInfo: {
+    flex: 1,
+    fontSize: 13
+  },
+  feedProduct: {
+    color: "#f1f5f9",
+    fontWeight: 700
+  },
+  feedShop: {
+    color: "#64748b",
+    fontWeight: 500
+  },
+  feedRight: {
+    textAlign: "right",
+    flexShrink: 0
+  },
+  feedPrice: {
+    fontSize: 15,
+    fontWeight: 800,
+    color: "#10b981"
+  },
+  feedTime: {
+    fontSize: 11,
+    color: "#475569",
+    marginTop: 2
+  },
+  catGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(5, 1fr)",
+    gap: 16
+  },
+  catCard: {
+    background: "rgba(30, 41, 59, 0.5)",
+    borderRadius: 16,
+    padding: "20px 16px",
+    textAlign: "center",
+    border: "1px solid rgba(59, 130, 246, 0.1)",
+    transition: "all 0.3s"
+  },
+  catEmoji: {
+    fontSize: 36,
+    marginBottom: 12
+  },
+  catName: {
+    fontSize: 13,
+    color: "#cbd5e1",
+    marginBottom: 12,
+    fontWeight: 700
+  },
+  catBarH: {
+    height: 8,
+    background: "rgba(15, 23, 42, 0.5)",
+    borderRadius: 4,
+    overflow: "hidden",
+    marginBottom: 12
+  },
+  catBarFill: {
+    height: "100%",
+    background: "linear-gradient(90deg, #f6a623 0%, #f97316 100%)",
+    borderRadius: 4,
+    transition: "width 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+    boxShadow: "0 0 12px rgba(246, 166, 35, 0.5)"
+  },
+  catUnits: {
+    fontSize: 16,
+    fontWeight: 900,
+    color: "#f6a623"
+  }
 };

@@ -1,4 +1,4 @@
-// Login.jsx — handles buyer, seller, owner login
+// Login.jsx — Premium login page
 import { useState } from "react";
 
 export default function Login({ onLogin }) {
@@ -15,12 +15,20 @@ export default function Login({ onLogin }) {
     owner:  { email:"owner@test.com",  password:"owner123"  },
   };
 
-  async function handleLogin() {
+  const roleConfig = {
+    buyer:  { icon:"🛒", label:"Buyer",  color:"#f6a623", gradient:"linear-gradient(135deg, #f6a623 0%, #f97316 100%)" },
+    seller: { icon:"🏪", label:"Seller", color:"#3b82f6", gradient:"linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)" },
+    owner:  { icon:"👑", label:"Owner",  color:"#7c3aed", gradient:"linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)" },
+  };
+
+  async function handleLogin(emailOverride, passwordOverride) {
     setError(""); setLoading(true);
+    const loginEmail    = emailOverride    || email;
+    const loginPassword = passwordOverride || password;
     try {
       const res  = await fetch("http://localhost:5000/api/auth/login", {
         method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ email, password }), // role is determined server-side
+        body: JSON.stringify({ email: loginEmail, password: loginPassword }),
       });
       const data = await res.json();
       if (data.success) {
@@ -39,59 +47,117 @@ export default function Login({ onLogin }) {
     setPassword(DEMO[role].password);
   }
 
-  const roleConfig = {
-    buyer:  { icon:"🛒", label:"Buyer",  color:"#f6a623" },
-    seller: { icon:"🏪", label:"Seller", color:"#3b82f6" },
-    owner:  { icon:"👑", label:"Owner",  color:"#7c3aed" },
-  };
-
   return (
     <div style={s.page}>
-      <div style={s.blob1}/><div style={s.blob2}/>
-      <div style={s.card}>
-        <div style={s.logoRow}>
-          <span style={s.logoIcon}>⚡</span>
-          <span style={s.logoText}>Smarter<span style={s.logoAccent}>Blinkit</span></span>
+      {/* Animated background */}
+      <div style={s.bgGradient}/>
+      <div style={s.blob1}/>
+      <div style={s.blob2}/>
+      <div style={s.blob3}/>
+      
+      {/* Main card */}
+      <div style={s.card} className="fade-in">
+        {/* Logo section */}
+        <div style={s.logoSection}>
+          <div style={s.logoCircle}>
+            <span style={s.logoIcon}>⚡</span>
+          </div>
+          <h1 style={s.logoText}>
+            Smarter<span style={{...s.logoAccent, background: roleConfig[role].gradient, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent"}}>Blinkit</span>
+          </h1>
+          <p style={s.tagline}>India's Most Intelligent Grocery Platform</p>
         </div>
-        <p style={s.tagline}>India's smartest grocery assistant</p>
 
-        {/* Role tabs */}
-        <div style={s.tabs}>
-          {Object.entries(roleConfig).map(([r, cfg]) => (
-            <button key={r}
-              style={{...s.tab,...(role===r?{...s.tabActive,background:cfg.color,color:"#fff"}:{})}}
-              onClick={()=>{setRole(r);setEmail(DEMO[r].email);setPassword(DEMO[r].password);setError("");}}>
-              {cfg.icon} {cfg.label}
-            </button>
-          ))}
-        </div>
-
-        <div style={s.formGroup}>
-          <label style={s.label}>Email</label>
-          <input style={s.input} type="email" placeholder={DEMO[role].email}
-            value={email} onChange={e=>setEmail(e.target.value)}/>
-        </div>
-        <div style={s.formGroup}>
-          <label style={s.label}>Password</label>
-          <div style={{position:"relative"}}>
-            <input style={{...s.input,paddingRight:44}} type={showPass?"text":"password"}
-              placeholder={DEMO[role].password} value={password}
-              onChange={e=>setPassword(e.target.value)}
-              onKeyDown={e=>e.key==="Enter"&&handleLogin()}/>
-            <button style={s.eye} onClick={()=>setShowPass(!showPass)}>{showPass?"🙈":"👁️"}</button>
+        {/* Role selector */}
+        <div style={s.roleSection}>
+          <p style={s.roleLabel}>Select Your Role</p>
+          <div style={s.tabs}>
+            {Object.entries(roleConfig).map(([r, cfg]) => (
+              <button key={r}
+                style={{
+                  ...s.tab,
+                  ...(role===r ? {
+                    background: cfg.gradient,
+                    color: "#fff",
+                    transform: "translateY(-2px)",
+                    boxShadow: `0 8px 24px ${cfg.color}44`
+                  } : {})
+                }}
+                onClick={()=>{setRole(r);setEmail(DEMO[r].email);setPassword(DEMO[r].password);setError("");}}>
+                <span style={s.tabIcon}>{cfg.icon}</span>
+                <span style={s.tabLabel}>{cfg.label}</span>
+              </button>
+            ))}
           </div>
         </div>
 
-        {error && <div style={s.err}>{error}</div>}
+        {/* Form section */}
+        <div style={s.formSection}>
+          <div style={s.formGroup}>
+            <label style={s.label}>
+              <span style={s.labelIcon}>📧</span>
+              Email Address
+            </label>
+            <input 
+              style={{...s.input, borderColor: role ? roleConfig[role].color + "33" : "#e5e7eb"}} 
+              type="email" 
+              placeholder="Enter your email"
+              value={email} 
+              onChange={e=>setEmail(e.target.value)}
+            />
+          </div>
+          
+          <div style={s.formGroup}>
+            <label style={s.label}>
+              <span style={s.labelIcon}>🔒</span>
+              Password
+            </label>
+            <div style={s.passwordWrapper}>
+              <input 
+                style={{...s.input, paddingRight: 48, borderColor: role ? roleConfig[role].color + "33" : "#e5e7eb"}} 
+                type={showPass?"text":"password"}
+                placeholder="Enter your password"
+                value={password}
+                onChange={e=>setPassword(e.target.value)}
+                onKeyDown={e=>e.key==="Enter"&&handleLogin()}
+              />
+              <button style={s.eye} onClick={()=>setShowPass(!showPass)}>
+                {showPass ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
+          </div>
 
-        <button style={{...s.loginBtn,background:`linear-gradient(135deg,${roleConfig[role].color},${roleConfig[role].color}cc)`}}
-          onClick={handleLogin} disabled={loading}>
-          {loading ? "Logging in..." : `Login as ${roleConfig[role].label} →`}
-        </button>
+          {error && (
+            <div style={s.err} className="slide-in">
+              <span style={s.errIcon}>⚠️</span>
+              {error}
+            </div>
+          )}
 
-        <div style={s.demoBox} onClick={fillDemo}>
-          <span style={s.demoTitle}>🧪 Click to fill demo credentials</span>
-          <span style={s.demoText}>{DEMO[role].email} / {DEMO[role].password}</span>
+          <button
+            style={{...s.loginBtn, background: roleConfig[role].gradient}}
+            onClick={() => handleLogin()} 
+            disabled={loading}>
+            {loading ? (
+              <><span style={s.btnSpinner}/> Logging in...</>
+            ) : (
+              <>Login as {roleConfig[role].label} <span style={s.btnArrow}>→</span></>
+            )}
+          </button>
+
+          {/* Demo credentials */}
+          <div style={s.demoBox} onClick={fillDemo}>
+            <div style={s.demoHeader}>
+              <span style={s.demoIcon}>🧪</span>
+              <span style={s.demoTitle}>Demo Credentials</span>
+            </div>
+            <div style={s.demoContent}>
+              <span style={s.demoText}>{DEMO[role].email}</span>
+              <span style={s.demoDivider}>•</span>
+              <span style={s.demoText}>{DEMO[role].password}</span>
+            </div>
+            <p style={s.demoHint}>Click to auto-fill</p>
+          </div>
         </div>
       </div>
     </div>
@@ -99,25 +165,285 @@ export default function Login({ onLogin }) {
 }
 
 const s = {
-  page:       {minHeight:"100vh",background:"#0d0d0d",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Segoe UI',sans-serif",position:"relative",overflow:"hidden"},
-  blob1:      {position:"absolute",width:400,height:400,borderRadius:"50%",background:"radial-gradient(circle,#f6a62344 0%,transparent 70%)",top:"-100px",right:"-100px",pointerEvents:"none"},
-  blob2:      {position:"absolute",width:300,height:300,borderRadius:"50%",background:"radial-gradient(circle,#7c3aed33 0%,transparent 70%)",bottom:"-80px",left:"-80px",pointerEvents:"none"},
-  card:       {background:"#1a1a1a",border:"1px solid #2a2a2a",borderRadius:20,padding:"40px 36px",width:"100%",maxWidth:420,position:"relative",zIndex:1,boxShadow:"0 25px 60px #0009"},
-  logoRow:    {display:"flex",alignItems:"center",gap:10,marginBottom:4},
-  logoIcon:   {fontSize:28,filter:"drop-shadow(0 0 8px #f6a623)"},
-  logoText:   {fontSize:26,fontWeight:800,color:"#fff",letterSpacing:-1},
-  logoAccent: {color:"#f6a623"},
-  tagline:    {color:"#666",fontSize:13,marginBottom:24,marginTop:0},
-  tabs:       {display:"flex",gap:6,marginBottom:24,background:"#111",borderRadius:12,padding:4},
-  tab:        {flex:1,padding:"9px 0",borderRadius:9,border:"none",background:"transparent",color:"#888",fontSize:13,fontWeight:600,cursor:"pointer"},
-  tabActive:  {color:"#fff"},
-  formGroup:  {marginBottom:16},
-  label:      {display:"block",color:"#aaa",fontSize:13,marginBottom:6,fontWeight:500},
-  input:      {width:"100%",padding:"12px 14px",borderRadius:10,border:"1px solid #333",background:"#111",color:"#fff",fontSize:15,outline:"none",boxSizing:"border-box"},
-  eye:        {position:"absolute",right:12,top:"50%",transform:"translateY(-50%)",background:"none",border:"none",cursor:"pointer",fontSize:18},
-  err:        {background:"#2a1111",border:"1px solid #5a1a1a",color:"#f87171",borderRadius:8,padding:"10px 14px",fontSize:13,marginBottom:16},
-  loginBtn:   {width:"100%",padding:14,borderRadius:12,border:"none",color:"#fff",fontSize:16,fontWeight:700,cursor:"pointer",marginBottom:16,opacity:1},
-  demoBox:    {background:"#111",border:"1px dashed #333",borderRadius:10,padding:"12px 16px",display:"flex",flexDirection:"column",gap:4,cursor:"pointer"},
-  demoTitle:  {color:"#666",fontSize:12,fontWeight:600},
-  demoText:   {color:"#f6a623",fontSize:13,fontFamily:"monospace"},
+  page: {
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "'Segoe UI', system-ui, sans-serif",
+    position: "relative",
+    overflow: "hidden",
+    padding: "20px"
+  },
+  bgGradient: {
+    position: "absolute",
+    inset: 0,
+    background: "radial-gradient(circle at 20% 50%, rgba(246, 166, 35, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.15) 0%, transparent 50%)",
+    pointerEvents: "none"
+  },
+  blob1: {
+    position: "absolute",
+    width: 500,
+    height: 500,
+    borderRadius: "50%",
+    background: "radial-gradient(circle, rgba(246, 166, 35, 0.2) 0%, transparent 70%)",
+    top: "-150px",
+    right: "-150px",
+    pointerEvents: "none",
+    animation: "pulse 8s ease-in-out infinite"
+  },
+  blob2: {
+    position: "absolute",
+    width: 400,
+    height: 400,
+    borderRadius: "50%",
+    background: "radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%)",
+    bottom: "-100px",
+    left: "-100px",
+    pointerEvents: "none",
+    animation: "pulse 10s ease-in-out infinite"
+  },
+  blob3: {
+    position: "absolute",
+    width: 300,
+    height: 300,
+    borderRadius: "50%",
+    background: "radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%)",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    pointerEvents: "none",
+    animation: "pulse 12s ease-in-out infinite"
+  },
+  card: {
+    background: "rgba(255, 255, 255, 0.98)",
+    backdropFilter: "blur(20px)",
+    borderRadius: 24,
+    padding: "48px 40px",
+    width: "100%",
+    maxWidth: 480,
+    position: "relative",
+    zIndex: 1,
+    boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1)"
+  },
+  logoSection: {
+    textAlign: "center",
+    marginBottom: 40
+  },
+  logoCircle: {
+    width: 80,
+    height: 80,
+    borderRadius: "50%",
+    background: "linear-gradient(135deg, #f6a623 0%, #f97316 100%)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "0 auto 20px",
+    boxShadow: "0 8px 32px rgba(246, 166, 35, 0.4)",
+    animation: "glow 3s ease-in-out infinite"
+  },
+  logoIcon: {
+    fontSize: 40,
+    filter: "drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2))"
+  },
+  logoText: {
+    fontSize: 32,
+    fontWeight: 900,
+    color: "#1a1a1a",
+    letterSpacing: -1,
+    marginBottom: 8
+  },
+  logoAccent: {
+    marginLeft: 4
+  },
+  tagline: {
+    color: "#64748b",
+    fontSize: 14,
+    fontWeight: 500,
+    margin: 0
+  },
+  roleSection: {
+    marginBottom: 32
+  },
+  roleLabel: {
+    fontSize: 13,
+    fontWeight: 600,
+    color: "#64748b",
+    textAlign: "center",
+    marginBottom: 12,
+    textTransform: "uppercase",
+    letterSpacing: 1
+  },
+  tabs: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: 12,
+    padding: 0
+  },
+  tab: {
+    padding: "16px 12px",
+    borderRadius: 16,
+    border: "2px solid #e5e7eb",
+    background: "#fff",
+    cursor: "pointer",
+    fontSize: 14,
+    fontWeight: 700,
+    color: "#64748b",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 8,
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)"
+  },
+  tabIcon: {
+    fontSize: 28,
+    lineHeight: 1
+  },
+  tabLabel: {
+    fontSize: 13,
+    fontWeight: 600
+  },
+  formSection: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 0
+  },
+  formGroup: {
+    marginBottom: 20
+  },
+  label: {
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
+    color: "#334155",
+    fontSize: 14,
+    marginBottom: 8,
+    fontWeight: 600
+  },
+  labelIcon: {
+    fontSize: 16
+  },
+  input: {
+    width: "100%",
+    padding: "14px 16px",
+    borderRadius: 12,
+    border: "2px solid #e5e7eb",
+    background: "#fff",
+    color: "#1a1a1a",
+    fontSize: 15,
+    outline: "none",
+    boxSizing: "border-box",
+    transition: "all 0.2s",
+    fontWeight: 500
+  },
+  passwordWrapper: {
+    position: "relative"
+  },
+  eye: {
+    position: "absolute",
+    right: 14,
+    top: "50%",
+    transform: "translateY(-50%)",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    fontSize: 20,
+    padding: 8,
+    color: "#64748b",
+    transition: "color 0.2s"
+  },
+  err: {
+    background: "linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)",
+    border: "2px solid #fca5a5",
+    color: "#dc2626",
+    borderRadius: 12,
+    padding: "12px 16px",
+    fontSize: 14,
+    marginBottom: 20,
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    fontWeight: 600
+  },
+  errIcon: {
+    fontSize: 18
+  },
+  loginBtn: {
+    width: "100%",
+    padding: "16px 24px",
+    borderRadius: 12,
+    border: "none",
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: 700,
+    cursor: "pointer",
+    marginBottom: 20,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    boxShadow: "0 4px 16px rgba(0, 0, 0, 0.15)",
+    transition: "all 0.3s"
+  },
+  btnSpinner: {
+    width: 16,
+    height: 16,
+    border: "2px solid #fff",
+    borderTopColor: "transparent",
+    borderRadius: "50%",
+    animation: "spin 0.6s linear infinite",
+    display: "inline-block"
+  },
+  btnArrow: {
+    fontSize: 18,
+    fontWeight: 900
+  },
+  demoBox: {
+    background: "linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)",
+    border: "2px dashed #cbd5e1",
+    borderRadius: 12,
+    padding: "16px 20px",
+    cursor: "pointer",
+    transition: "all 0.3s"
+  },
+  demoHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 8
+  },
+  demoIcon: {
+    fontSize: 18
+  },
+  demoTitle: {
+    color: "#475569",
+    fontSize: 13,
+    fontWeight: 700,
+    textTransform: "uppercase",
+    letterSpacing: 0.5
+  },
+  demoContent: {
+    display: "flex",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 4
+  },
+  demoText: {
+    color: "#f6a623",
+    fontSize: 14,
+    fontFamily: "'Courier New', monospace",
+    fontWeight: 600
+  },
+  demoDivider: {
+    color: "#cbd5e1",
+    fontSize: 12
+  },
+  demoHint: {
+    color: "#94a3b8",
+    fontSize: 12,
+    margin: 0,
+    fontStyle: "italic"
+  }
 };

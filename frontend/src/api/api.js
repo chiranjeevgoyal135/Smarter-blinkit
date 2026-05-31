@@ -24,10 +24,13 @@ export async function loginUser(email, password, role) {
 
 // ── Suggestions ───────────────────────────────────────────
 // Sends search query, gets AI product suggestions back
+// NOTE: backend route is POST — body carries the query as JSON
 export async function getSuggestions(query) {
-  const response = await fetch(
-    `${BASE_URL}/suggestions?query=${encodeURIComponent(query)}`
-  );
+  const response = await fetch(`${BASE_URL}/suggestions`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query }),
+  });
   return response.json();
 }
 

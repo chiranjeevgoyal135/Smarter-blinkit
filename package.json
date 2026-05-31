@@ -1,5 +1,35 @@
 {
+  "name": "smarter-blinkit",
+  "version": "2.0.0",
+  "description": "AI-Powered Grocery Platform - Competition Ready",
+  "main": "index.js",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "seed:mongo": "cd backend && npm run seed",
+    "seed:neo4j": "cd backend && node neo4j-seed.js",
+    "seed:all": "npm run seed:mongo && npm run seed:neo4j",
+    "build": "cd frontend && npm run build",
+    "preview": "cd frontend && npm run preview"
+  },
+  "keywords": [
+    "grocery",
+    "ai",
+    "ecommerce",
+    "react",
+    "nodejs",
+    "mongodb",
+    "neo4j",
+    "groq"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
   "dependencies": {
     "neo4j-driver": "^6.0.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
   }
 }
